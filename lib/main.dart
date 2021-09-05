@@ -18,15 +18,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //String stringResponse = 'Null';
-  List listResponse = ['Null'];
-
+  // List listResponse = [null];
+  Map mapResponse = {};
+  List listOfResponse = [];
   Future fetchData() async {
     http.Response response;
-    var url = Uri.parse("https://www.thegrowingdeveloper.org/apiview?id=4");
+    var url = Uri.parse("https://www.thegrowingdeveloper.org/apiview?id=2");
     response = await http.get(url);
     if (response.statusCode == 200) {
       setState(() {
-        listResponse = json.decode(response.body);
+        mapResponse = json.decode(response.body);
+        listOfResponse = mapResponse['facts'];
       });
     }
   }
@@ -43,10 +45,29 @@ class _HomePageState extends State<HomePage> {
         title: Text("Hello How are you"),
         backgroundColor: Colors.red[900],
       ),
-      body: Text(
-        listResponse[2].toString(),
-        style: TextStyle(fontSize: 30),
-      ),
+      body: mapResponse == null
+          ? Container()
+          : Column(
+              children: <Widget>[
+                Text(
+                  mapResponse['category'].toString(),
+                  style: TextStyle(fontSize: 30),
+                ),
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index)
+                    {
+                  return Container(
+
+                    child: Column(
+                      children: [
+                        Image.network(listOfResponse[index]["image_url"])
+                      ],
+                    ),
+                  );
+                })
+              ],
+            ),
     );
   }
 }
