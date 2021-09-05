@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -15,19 +17,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String stringResponse = 'Null';
+  //String stringResponse = 'Null';
+  List listResponse = ['Null'];
 
   Future fetchData() async {
     http.Response response;
-    var url = Uri.parse("https://www.thegrowingdeveloper.org/apiview?id=1");
+    var url = Uri.parse("https://www.thegrowingdeveloper.org/apiview?id=4");
     response = await http.get(url);
     if (response.statusCode == 200) {
       setState(() {
-        stringResponse = response.body;
+        listResponse = json.decode(response.body);
       });
     }
   }
-
 
   void initState() {
     fetchData();
@@ -42,7 +44,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.red[900],
       ),
       body: Text(
-        stringResponse.toString(),
+        listResponse[2].toString(),
         style: TextStyle(fontSize: 30),
       ),
     );
